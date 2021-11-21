@@ -1,11 +1,12 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import { Product } from '../products';
+import Rating from './Rating';
 interface Props {
   product: Product;
 }
 const ProductComp: React.FC<Props> = ({
-  product: { image, name, description, _id, rating, numReviews, price },
+  product: { image, name, _id, rating, numReviews, price },
 }) => {
   return (
     <Card className='rounded my-3 p-3'>
@@ -19,9 +20,7 @@ const ProductComp: React.FC<Props> = ({
           </Card.Title>
         </a>
         <Card.Text as='div'>
-          <div className='my-3'>
-            {rating} from {numReviews} reviews
-          </div>
+          <Rating value={rating} text={`${numReviews} reviews`} />
         </Card.Text>
         <Card.Text as='h3'>{price}</Card.Text>
       </Card.Body>
