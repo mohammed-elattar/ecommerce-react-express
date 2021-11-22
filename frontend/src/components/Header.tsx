@@ -3,15 +3,17 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router';
 
-interface Props {}
-
-const Header = (props: Props) => {
+const Header: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <header>
       <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
         <Container>
-          <Navbar.Brand href='/'>React-Bootstrap</Navbar.Brand>
+          <Navbar.Brand onClick={() => navigate('/')} href='/'>
+            React-Bootstrap
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>

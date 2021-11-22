@@ -1,12 +1,12 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
+import MasterPage from '../components/MasterPage';
 import Product from '../components/Product';
 import products from '../products';
-interface Props {}
 
-const Home = (props: Props) => {
+const Home: React.FC = () => {
   return (
-    <>
+    <MasterPage>
       <h1>Latest Products</h1>
       <Row>
         {products.map((product) => (
@@ -15,7 +15,7 @@ const Home = (props: Props) => {
           </Col>
         ))}
       </Row>
-    </>
+    </MasterPage>
   );
 };
 
