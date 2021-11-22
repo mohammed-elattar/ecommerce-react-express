@@ -1,19 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import MasterPage from '../components/MasterPage';
 import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
 import products, { Product } from '../products';
 import Rating from '../components/Rating';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-interface Props {}
-
-const ProductScreen = (props: Props) => {
+const ProductScreen = () => {
   const { id: productId } = useParams();
-  const product = products.find(
-    (product: Product) => product._id === productId
-  );
 
+  const [product, setProduct] = useState<Product>();
+  const fetchProduct = async () => {
+    const { data } = await axios.get(`/api/products/${productId}`);
+
+    setProduct(data);
+  };
+
+  useEffect(() => {
+    fetchProduct();
+  }, []);
   return (
     <MasterPage>
       <Link className='btn btn-light my-3' to='/'>
