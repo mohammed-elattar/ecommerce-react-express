@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
-const port = 3005;
+const dotenv = require('dotenv');
 const products = require('./data/products');
 
+dotenv.config();
+const port = process.env.PORT || 3005;
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
