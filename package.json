@@ -3,11 +3,18 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-      "start": "node backend/server"
+    "start": "node backend/server",
+    "server": "nodemon backend/server",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"yarn run server\" \"yarn run client\""
   },
   "author": "mohammed-elattar <mseel3ttar@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "concurrently": "^6.4.0",
+    "nodemon": "^2.0.15"
   }
 }
