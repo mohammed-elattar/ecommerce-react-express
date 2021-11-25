@@ -28,8 +28,14 @@ const Home: React.FC = () => {
       </Row>
     );
   } else if (isError) {
-    console.log(error);
-    content = <div>{error?.toString()}</div>;
+    content =
+      error && 'status' in error ? (
+        <div>
+          {error?.status} {JSON.stringify(error?.data)}
+        </div>
+      ) : (
+        <div>{error?.toString()}</div>
+      );
   }
   return (
     <MasterPage>
