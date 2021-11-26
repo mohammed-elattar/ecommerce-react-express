@@ -1,6 +1,8 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
+import Loader from '../components/Loader';
 import MasterPage from '../components/MasterPage';
+import Message from '../components/Message';
 import Product from '../components/Product';
 import { Product as ProductModel } from '../products';
 import { useFetchProductsQuery } from '../store/features/product-api-slice';
@@ -16,7 +18,7 @@ const Home: React.FC = () => {
   let content;
 
   if (isLoading) {
-    content = <h1>Loading...</h1>;
+    content = <Loader />;
   } else if (isSuccess) {
     content = (
       <Row>
@@ -30,11 +32,15 @@ const Home: React.FC = () => {
   } else if (isError) {
     content =
       error && 'status' in error ? (
-        <div>
-          {error?.status} {JSON.stringify(error?.data)}
-        </div>
+        <Message variant='danger'>
+          <div>
+            {error.status} {error.data.message}
+          </div>
+        </Message>
       ) : (
-        <div>{error?.toString()}</div>
+        <Message variant='danger'>
+          <div>{error?.toString()}</div>
+        </Message>
       );
   }
   return (

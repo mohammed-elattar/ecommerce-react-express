@@ -1,25 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import MasterPage from '../components/MasterPage';
 import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
-import products, { Product } from '../products';
 import Rating from '../components/Rating';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { useFetchProductQuery } from '../store/features/product-api-slice';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
+  const {
+    data: product,
+    isLoading,
+    // isSuccess,
+    isError,
+    error,
+  } = useFetchProductQuery(productId);
+  if (isLoading) {
+    return (
+      <MasterPage>
+        <Loader />
+      </MasterPage>
+    );
+  } else if (isError) {
+    const content =
+      error && 'status' in error ? (
+        <Message variant='danger'>
+          <div>
+            {error.status} {error.data.message}
+          </div>
+        </Message>
+      ) : (
+        <Message variant='danger'>
+          <div>{error?.toString()}</div>
+        </Message>
+      );
+    return <MasterPage>{content}</MasterPage>;
+  }
 
-  const [product, setProduct] = useState<Product>();
-  const fetchProduct = async () => {
-    const { data } = await axios.get(`/api/products/${productId}`);
-
-    setProduct(data);
-  };
-
-  useEffect(() => {
-    fetchProduct();
-  }, []);
   return (
     <MasterPage>
       <Link className='btn btn-light my-3' to='/'>
