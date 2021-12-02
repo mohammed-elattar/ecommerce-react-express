@@ -20,7 +20,7 @@ const Header: React.FC = () => {
               <Nav.Link href='/cart'>
                 <FontAwesomeIcon icon={faShoppingCart} /> Cart
               </Nav.Link>
-              <Nav.Link href='/signin'>
+              <Nav.Link href='/login'>
                 <FontAwesomeIcon icon={faUser} /> Sign In
               </Nav.Link>
             </Nav>

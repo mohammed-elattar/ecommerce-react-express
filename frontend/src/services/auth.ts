@@ -12,11 +12,12 @@ export interface UserResponse {
 }
 
 export interface LoginRequest {
-  username: string
+  email: string
   password: string
 }
 
 export const api = createApi({
+    reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
     baseUrl: '/',
     prepareHeaders: (headers, { getState }) => {

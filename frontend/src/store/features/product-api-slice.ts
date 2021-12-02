@@ -8,7 +8,7 @@ interface CustomError {
     status: number
 }
 export const apiSlice = createApi({
-  reducerPath: 'api',
+  reducerPath: 'productApi',
   baseQuery: fetchBaseQuery({baseUrl: '/api'}) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
   endpoints(builder) {
     return {

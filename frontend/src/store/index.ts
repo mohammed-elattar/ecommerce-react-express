@@ -13,9 +13,8 @@ export const store = configureStore({
     cart: cartSlice.reducer,
     auth: authReducer,
   },
-  middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware().concat(apiSlice.middleware);
-  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat( api.middleware)
+  ,
 });
 
 export type AppDispatch = typeof store.dispatch;
