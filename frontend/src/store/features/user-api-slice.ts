@@ -1,28 +1,30 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { User } from '../../services/auth'
+import { createSlice } from '@reduxjs/toolkit'
+import { api, User } from '../../services/auth'
 import type { RootState } from '../index';
 
+const userInfoFromStorage = localStorage.getItem('userInfo')
+  ? JSON.parse(localStorage.getItem('userInfo') as string)
+  : null
+  
 type AuthState = {
-  user: User | null
-  token: string | null
+    userLogin: {userInfo : User | null }
 }
 
 const slice = createSlice({
   name: 'auth',
-  initialState: { user: null, token: null } as AuthState,
-  reducers: {
-    setCredentials: (
-      state,
-      { payload: { user, token } }: PayloadAction<{ user: User; token: string }>
-    ) => {
-      state.user = user
-      state.token = token
-    },
+  initialState: { userLogin: {userInfo: userInfoFromStorage}} as AuthState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      api.endpoints.login.matchFulfilled,
+      (state, { payload }) => {
+        state.userLogin.userInfo = payload;
+        localStorage.setItem('userInfo', JSON.stringify(payload));
+      }
+    )
   },
 })
 
-export const { setCredentials } = slice.actions
+export default slice.reducer;
 
-export default slice.reducer
-
-export const selectCurrentUser = (state: RootState) => state.auth.user
+export const selectCurrentUser = (state: RootState) => state.auth.userLogin.userInfo;

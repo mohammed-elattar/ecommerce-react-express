@@ -1,46 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { useLoginMutation } from '../services/auth';
 import { useAuth } from '../hooks/useAuth';
 import MasterPage from '../components/MasterPage';
+import CustomError from '../types/CustomError';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   let [searchParams] = useSearchParams();
 
   const [login, { isLoading, isError, error }] = useLoginMutation();
 
-  //   const userLogin = useSelector((state) => state.userLogin);
-  //   const { loading, error, userInfo } = userLogin;
   const redirectUrl = searchParams.get('redirect');
   const redirect = null !== redirectUrl ? redirectUrl : '/';
   const { user } = useAuth();
   useEffect(() => {
-    console.log(user);
     if (user) {
       navigate({ pathname: redirect });
     }
   }, [navigate, user, redirect]);
 
+  let message = isError && (
+    <Message variant='danger'>
+      <div>
+        {(error as CustomError).status} {(error as CustomError).data.message}
+      </div>
+    </Message>
+  );
+
   const submitHandler = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    await login({ email, password }).unwrap();
+    try {
+      e.preventDefault();
+      await login({ email, password }).unwrap();
+    } catch (error: any) {
+      message = (
+        <Message variant='danger'>
+          {error?.message || 'Something went wrong'}
+        </Message>
+      );
+    }
   };
 
   return (
     <MasterPage>
       <FormContainer>
         <h1>Sign In</h1>
-        {isError && <Message variant='danger'>{error}</Message>}
+        {message}
         {isLoading && <Loader />}
         <Form onSubmit={submitHandler}>
           <Form.Group controlId='email'>
