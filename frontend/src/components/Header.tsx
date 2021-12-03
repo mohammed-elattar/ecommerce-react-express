@@ -1,11 +1,19 @@
 import React from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router';
+import { useAuth } from '../hooks/useAuth';
+import { logout } from '../store/features/user-api-slice';
+import { useDispatch } from 'react-redux';
 
 const Header: React.FC = () => {
+  const { user: userInfo } = useAuth();
+  const dispatch = useDispatch();
+  const logoutHandler = () => {
+    dispatch(logout());
+  };
   const navigate = useNavigate();
   return (
     <header>
@@ -20,9 +28,34 @@ const Header: React.FC = () => {
               <Nav.Link href='/cart'>
                 <FontAwesomeIcon icon={faShoppingCart} /> Cart
               </Nav.Link>
-              <Nav.Link href='/login'>
-                <FontAwesomeIcon icon={faUser} /> Sign In
-              </Nav.Link>
+
+              {userInfo ? (
+                <NavDropdown title={userInfo.name} id='username'>
+                  <Nav.Link href='/profile'>
+                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                  </Nav.Link>
+                  <NavDropdown.Item onClick={logoutHandler}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <Nav.Link href='/login'>
+                  <FontAwesomeIcon icon={faUser} /> Sign In
+                </Nav.Link>
+              )}
+              {userInfo && userInfo.isAdmin && (
+                <NavDropdown title='Admin' id='adminmenu'>
+                  <Nav.Link href='/admin/userlist'>
+                    <NavDropdown.Item>Users</NavDropdown.Item>
+                  </Nav.Link>
+                  <Nav.Link href='/admin/productlist'>
+                    <NavDropdown.Item>Products</NavDropdown.Item>
+                  </Nav.Link>
+                  <Nav.Link href='/admin/orderlist'>
+                    <NavDropdown.Item>Orders</NavDropdown.Item>
+                  </Nav.Link>
+                </NavDropdown>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>

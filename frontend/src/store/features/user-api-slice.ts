@@ -13,7 +13,13 @@ type AuthState = {
 const slice = createSlice({
   name: 'auth',
   initialState: { userLogin: {userInfo: userInfoFromStorage}} as AuthState,
-  reducers: {},
+  reducers: {
+      logout(state) {
+        localStorage.removeItem('userInfo');
+        localStorage.removeItem('cartItems');
+        state.userLogin.userInfo = null;
+      }
+  },
   extraReducers: (builder) => {
     builder.addMatcher(
       api.endpoints.login.matchFulfilled,
@@ -27,4 +33,5 @@ const slice = createSlice({
 
 export default slice.reducer;
 
+export const {logout} = slice.actions;
 export const selectCurrentUser = (state: RootState) => state.auth.userLogin.userInfo;
