@@ -1,12 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
+import { stat } from "fs";
 export interface CartItem { 
     product: string,
   name: string,
   image: string,
   price: string,
   countInStock: number,
-  qty: number};
+  qty: number
+};
+const cartItemsFromStorage = localStorage.getItem('cartItems')
+  ? JSON.parse(localStorage.getItem('cartItems') as string)
+  : []
+
 export const addToCart = createAsyncThunk(
     'users/fetchByIdStatus',
     async (cartData:{productId: string, qty: number}, thunkAPI) => {
@@ -24,7 +30,7 @@ export const addToCart = createAsyncThunk(
   )
   
   const initialState = {
-    cartItems: [],
+    cartItems: cartItemsFromStorage,
   } as { cartItems: CartItem[] };
 
   export const cartSlice = createSlice({
@@ -36,6 +42,7 @@ export const addToCart = createAsyncThunk(
     extraReducers: (builder) => {
       builder.addCase(addToCart.fulfilled, (state: {cartItems: CartItem[]}, action) => {
         state.cartItems.push(action.payload);
+        localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
       })
     },
   })
