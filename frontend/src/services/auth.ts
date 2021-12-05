@@ -43,10 +43,10 @@ export const api = createApi({
       }),
     }),
     register: builder.mutation<User, RegisterRequest>({
-        query: (credentials) => ({
+        query: (registerData) => ({
           url: 'register',
           method: 'POST',
-          body: credentials,
+          body: registerData,
         }),
       }),
     protected: builder.mutation<{ message: string }, void>({
