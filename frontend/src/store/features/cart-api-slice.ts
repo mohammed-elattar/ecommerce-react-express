@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
-import { stat } from "fs";
 export interface CartItem { 
     product: string,
   name: string,

@@ -11,9 +11,15 @@ export interface User {
 }
 
 export interface LoginRequest {
-  email: string
-  password: string
+  email: string,
+  password: string,
 }
+
+export interface RegisterRequest {
+    email: string,
+    password: string,
+    name: string,
+  }
 
 export const api = createApi({
     reducerPath: 'authApi',
@@ -36,10 +42,19 @@ export const api = createApi({
         body: credentials,
       }),
     }),
+    register: builder.mutation<User, RegisterRequest>({
+        query: (credentials) => ({
+          url: 'register',
+          method: 'POST',
+          body: credentials,
+        }),
+      }),
     protected: builder.mutation<{ message: string }, void>({
       query: () => 'protected',
     }),
   }),
+
+    
 })
 
-export const { useLoginMutation, useProtectedMutation } = api
+export const { useLoginMutation, useRegisterMutation, useProtectedMutation } = api

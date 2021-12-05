@@ -7,12 +7,13 @@ const userInfoFromStorage = localStorage.getItem('userInfo')
   : null
   
 type AuthState = {
-    userLogin: {userInfo : User | null }
+    userLogin: {userInfo : User | null },
+    userRegister: {userInfo : User | null },
 }
 
 const slice = createSlice({
   name: 'auth',
-  initialState: { userLogin: {userInfo: userInfoFromStorage}} as AuthState,
+  initialState: { userLogin: {userInfo: userInfoFromStorage}, userRegister: {userInfo: userInfoFromStorage}} as AuthState,
   reducers: {
       logout(state) {
         localStorage.removeItem('userInfo');
@@ -25,6 +26,12 @@ const slice = createSlice({
       api.endpoints.login.matchFulfilled,
       (state, { payload }) => {
         state.userLogin.userInfo = payload;
+        localStorage.setItem('userInfo', JSON.stringify(payload));
+      },
+    ).addMatcher(
+        api.endpoints.register.matchFulfilled,
+      (state, { payload }) => {
+        state.userRegister.userInfo = payload;
         localStorage.setItem('userInfo', JSON.stringify(payload));
       }
     )
