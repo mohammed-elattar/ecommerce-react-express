@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
-import { act } from "react-dom/test-utils"
 import { RootState } from ".."
 export interface CartItem { 
     product: string,
@@ -24,6 +23,8 @@ const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
   ? JSON.parse(localStorage.getItem('shippingAddress') as string)
   : []
 
+  const paymentMethodFromStorage = localStorage.getItem('paymentMethod');
+
 export const addToCart = createAsyncThunk(
     'users/fetchByIdStatus',
     async (cartData:{productId: string, qty: number}, thunkAPI) => {
@@ -42,15 +43,17 @@ export const addToCart = createAsyncThunk(
   
   const initialState = {
     cartItems: cartItemsFromStorage,
-    shippingAddress: shippingAddressFromStorage
-  } as { cartItems: CartItem[], shippingAddress: ShippingAddress };
+    shippingAddress: shippingAddressFromStorage,
+    paymentMethod: paymentMethodFromStorage
+  } as { cartItems: CartItem[], shippingAddress: ShippingAddress, paymentMethod: string };
 
   export const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
         removeFromCart(state, action) { const newCartItems = state.cartItems.filter((cartItem:CartItem) => cartItem.product !== action.payload); state.cartItems = newCartItems;},
-        saveShippingAddress(state, action) {state.shippingAddress = action.payload; localStorage.setItem('shippingAddress', JSON.stringify(state.shippingAddress))}
+        saveShippingAddress(state, action) {state.shippingAddress = action.payload; localStorage.setItem('shippingAddress', JSON.stringify(state.shippingAddress))},
+        savePaymentMethod(state, action) {state.paymentMethod = action.payload; localStorage.setItem('paymentMethod', action.payload)}
     },
     extraReducers: (builder) => {
       builder.addCase(addToCart.fulfilled, (state: {cartItems: CartItem[]}, action) => {
@@ -61,6 +64,7 @@ export const addToCart = createAsyncThunk(
   })
 
 
-export const {removeFromCart, saveShippingAddress} = cartSlice.actions;
+export const {removeFromCart, saveShippingAddress, savePaymentMethod} = cartSlice.actions;
 export const selectShippingAddress = (state: RootState) => state.cart.shippingAddress;
+export const selectpaymentMethod = (state: RootState) => state.cart.paymentMethod;
 export const selectCartItems = (state: RootState) => state.cart.cartItems;

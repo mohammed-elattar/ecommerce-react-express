@@ -8,6 +8,7 @@ import RegisterScreen from './screens/Register';
 import PrivateRoute from './utils/PrivateRoute';
 import Profile from './screens/Profile';
 import Shipping from './screens/Shipping';
+import Payment from './screens/Payment';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
           <Route path='/cart/:id' element={<CartScreen />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/shipping' element={<Shipping />} />
+          <Route path='/payment' element={<Payment />} />
         </Route>
       </Routes>
     </Router>
