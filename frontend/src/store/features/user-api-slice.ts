@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { api, User } from '../../services/auth'
+import { userProfileApi } from '../../services/userProfile';
 import type { RootState } from '../index';
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
@@ -29,6 +30,12 @@ const slice = createSlice({
       },
     ).addMatcher(
         api.endpoints.register.matchFulfilled,
+      (state, { payload }) => {
+        state.userLogin.userInfo = payload;
+        localStorage.setItem('userInfo', JSON.stringify(payload));
+      }
+    ).addMatcher(
+        userProfileApi.endpoints.updateUserProfile.matchFulfilled,
       (state, { payload }) => {
         state.userLogin.userInfo = payload;
         localStorage.setItem('userInfo', JSON.stringify(payload));
