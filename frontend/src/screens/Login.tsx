@@ -20,12 +20,12 @@ const LoginScreen = () => {
 
   const redirectUrl = searchParams.get('redirect');
   const redirect = null !== redirectUrl ? redirectUrl : '/';
-  const { user } = useAuth();
+  const { user: userInfo } = useAuth();
   useEffect(() => {
-    if (user) {
+    if (userInfo) {
       navigate({ pathname: redirect });
     }
-  }, [navigate, user, redirect]);
+  }, [navigate, userInfo, redirect]);
 
   let message = isError && (
     <Message variant='danger'>
@@ -39,6 +39,7 @@ const LoginScreen = () => {
     try {
       e.preventDefault();
       await login({ email, password }).unwrap();
+      navigate({ pathname: redirect });
     } catch (error: any) {
       message = (
         <Message variant='danger'>

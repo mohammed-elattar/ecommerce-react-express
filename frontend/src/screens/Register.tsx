@@ -18,11 +18,11 @@ const RegisterScreen = () => {
   let [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const { user: userInfo } = useAuth();
   const [register, { isError, isLoading, error }] = useRegisterMutation();
   const redirectUrl = searchParams.get('redirect');
   const redirect = null !== redirectUrl ? redirectUrl : '/';
 
+  const { user: userInfo } = useAuth();
   useEffect(() => {
     if (userInfo) {
       navigate({ pathname: redirect });
@@ -36,31 +36,39 @@ const RegisterScreen = () => {
         throw new Error('passwords do not match');
       } else {
         await register({ name, email, password }).unwrap();
+        navigate({ pathname: redirect });
       }
     } catch (error: any) {
       setMessage(error?.message || 'Something went wrong');
     }
   };
 
+  const renderMessage = () => {
+    if (isError) {
+      return (
+        <Message variant='danger'>
+          <div>
+            {(error as CustomError).status}{' '}
+            {(error as CustomError).data.message || message}
+          </div>
+        </Message>
+      );
+    } else if (message) {
+      return (
+        <Message variant='danger'>
+          <div>{message}</div>
+        </Message>
+      );
+    }
+
+    return;
+  };
+
   return (
     <MasterPage>
       <FormContainer>
         <h1>Sign Up</h1>
-        {message && (
-          <Message variant='danger'>
-            <div>{message}</div>
-          </Message>
-        )}
-
-        {isError && (
-          <Message variant='danger'>
-            <div>
-              {(error as CustomError).status}{' '}
-              {(error as CustomError).data.message}
-            </div>
-          </Message>
-        )}
-
+        {renderMessage()}
         {isLoading && <Loader />}
         <Form onSubmit={submitHandler}>
           <Form.Group controlId='name'>
