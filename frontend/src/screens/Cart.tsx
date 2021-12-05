@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useSelector, useDispatch, RootStateOrAny } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   addToCart,
   CartItem,
   removeFromCart,
+  selectCartItems,
 } from '../store/features/cart-api-slice';
 import {
   Row,
@@ -25,11 +26,8 @@ const CartScreen: React.FC = () => {
   const qty = location.search ? Number(location.search.split('=')[1]) : 1;
   const navigate = useNavigate();
 
-  const state = useSelector((state: RootStateOrAny) => {
-    return state.cart;
-  });
+  const cartItems = useSelector(selectCartItems);
 
-  const { cartItems } = state;
   useEffect(() => {
     if (productId) {
       dispatch(addToCart({ productId, qty }));
@@ -41,7 +39,7 @@ const CartScreen: React.FC = () => {
   };
 
   const checkoutHandler = () => {
-    navigate('/login?redirect=shipping');
+    navigate('/shipping');
   };
 
   return (

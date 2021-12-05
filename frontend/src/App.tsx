@@ -7,6 +7,7 @@ import LoginScreen from './screens/Login';
 import RegisterScreen from './screens/Register';
 import PrivateRoute from './utils/PrivateRoute';
 import Profile from './screens/Profile';
+import Shipping from './screens/Shipping';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path='/product/:id' element={<Product />} />
           <Route path='/cart/:id' element={<CartScreen />} />
           <Route path='/profile' element={<Profile />} />
+          <Route path='/shipping' element={<Shipping />} />
         </Route>
       </Routes>
     </Router>
