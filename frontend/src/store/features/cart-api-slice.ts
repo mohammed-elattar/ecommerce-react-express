@@ -44,8 +44,16 @@ export const addToCart = createAsyncThunk(
   const initialState = {
     cartItems: cartItemsFromStorage,
     shippingAddress: shippingAddressFromStorage,
-    paymentMethod: paymentMethodFromStorage
-  } as { cartItems: CartItem[], shippingAddress: ShippingAddress, paymentMethod: string };
+    paymentMethod: paymentMethodFromStorage, 
+    itemsPrice: '0',
+    shippingPrice: '0',
+    taxPrice: '0',
+    totalPrice: '0',
+  } as { 
+    cartItems: CartItem[], shippingAddress: ShippingAddress, paymentMethod: string, itemsPrice: string,
+    shippingPrice: string,
+    taxPrice: string,
+    totalPrice: string, };
 
   export const cartSlice = createSlice({
     name: 'cart',
@@ -68,3 +76,4 @@ export const {removeFromCart, saveShippingAddress, savePaymentMethod} = cartSlic
 export const selectShippingAddress = (state: RootState) => state.cart.shippingAddress;
 export const selectpaymentMethod = (state: RootState) => state.cart.paymentMethod;
 export const selectCartItems = (state: RootState) => state.cart.cartItems;
+export const selectCart = (state: RootState) => state.cart;
