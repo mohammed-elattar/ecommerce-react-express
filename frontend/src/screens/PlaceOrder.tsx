@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import CheckoutSteps from '../components/CheckoutSteps';
-import { CartItem, selectCart } from '../store/features/cart-api-slice';
+import { selectCart } from '../store/features/cart-api-slice';
 import Message from '../components/Message';
 import MasterPage from '../components/MasterPage';
 
@@ -17,26 +17,6 @@ const PlaceOrder = () => {
   } else if (!cart.paymentMethod) {
     navigate('/payment');
   }
-  //   Calculate prices
-  const addDecimals = (num: number) => {
-    return (Math.round(num * 100) / 100).toFixed(2);
-  };
-
-  const itemsPrice = addDecimals(
-    cart.cartItems.reduce(
-      (acc: number, item: CartItem) => acc + parseFloat(item.price) * item.qty,
-      0
-    )
-  );
-  const shippingPrice = addDecimals(
-    parseFloat(cart.itemsPrice) > 100 ? 0 : 100
-  );
-  const taxPrice = addDecimals(0.15 * parseFloat(itemsPrice));
-  const totalPrice = (
-    parseFloat(itemsPrice) +
-    parseFloat(shippingPrice) +
-    parseFloat(taxPrice)
-  ).toFixed(2);
 
   const placeOrderHandler = () => {
     console.log('order');
@@ -107,25 +87,25 @@ const PlaceOrder = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col>${itemsPrice}</Col>
+                  <Col>${cart.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
-                  <Col>${shippingPrice}</Col>
+                  <Col>${cart.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
-                  <Col>${taxPrice}</Col>
+                  <Col>${cart.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>${totalPrice}</Col>
+                  <Col>${cart.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>

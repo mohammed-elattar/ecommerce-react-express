@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 import { RootState } from ".."
+
 export interface CartItem { 
     product: string,
   name: string,
@@ -16,15 +17,25 @@ export interface ShippingAddress {
      postalCode?:string,
       country:string,
 }
+
 const cartItemsFromStorage = localStorage.getItem('cartItems')
   ? JSON.parse(localStorage.getItem('cartItems') as string)
   : []
-const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
+
+  const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
   ? JSON.parse(localStorage.getItem('shippingAddress') as string)
+  : []
+
+  const cartPricesFromStorage = localStorage.getItem('cartPrices')
+  ? JSON.parse(localStorage.getItem('cartPrices') as string)
   : []
 
   const paymentMethodFromStorage = localStorage.getItem('paymentMethod');
 
+  const addDecimals = (num: number) => {
+    return (Math.round(num * 100) / 100).toFixed(2);
+  };
+  
 export const addToCart = createAsyncThunk(
     'users/fetchByIdStatus',
     async (cartData:{productId: string, qty: number}, thunkAPI) => {
@@ -45,12 +56,10 @@ export const addToCart = createAsyncThunk(
     cartItems: cartItemsFromStorage,
     shippingAddress: shippingAddressFromStorage,
     paymentMethod: paymentMethodFromStorage, 
-    itemsPrice: '0',
-    shippingPrice: '0',
-    taxPrice: '0',
-    totalPrice: '0',
+    ...cartPricesFromStorage
   } as { 
-    cartItems: CartItem[], shippingAddress: ShippingAddress, paymentMethod: string, itemsPrice: string,
+    cartItems: CartItem[], shippingAddress: ShippingAddress, paymentMethod: string, 
+    itemsPrice: string,
     shippingPrice: string,
     taxPrice: string,
     totalPrice: string, };
@@ -64,9 +73,35 @@ export const addToCart = createAsyncThunk(
         savePaymentMethod(state, action) {state.paymentMethod = action.payload; localStorage.setItem('paymentMethod', action.payload)}
     },
     extraReducers: (builder) => {
-      builder.addCase(addToCart.fulfilled, (state: {cartItems: CartItem[]}, action) => {
+      builder.addCase(addToCart.fulfilled, (state: {cartItems: CartItem[], itemsPrice: string,
+        shippingPrice: string,
+        taxPrice: string,
+        totalPrice: string,}, action) => {
         state.cartItems.push(action.payload);
         localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
+
+        
+        const itemsPrice = addDecimals(
+            cartItemsFromStorage.reduce(
+              (acc: number, item: CartItem) => acc + parseFloat(item.price) * item.qty,
+              0
+            )
+          );
+          const shippingPrice = addDecimals(
+            parseFloat(state.itemsPrice) > 100 ? 0 : 100
+          );
+          const taxPrice = addDecimals(0.15 * parseFloat(itemsPrice));
+          const totalPrice = (
+            parseFloat(itemsPrice) +
+            parseFloat(shippingPrice) +
+            parseFloat(taxPrice)
+          ).toFixed(2);
+        state.itemsPrice = itemsPrice;
+        state.shippingPrice = shippingPrice;
+        state.taxPrice = taxPrice;
+        state.totalPrice = totalPrice;    
+
+        localStorage.setItem('cartPrices', JSON.stringify({itemsPrice, shippingPrice, taxPrice, totalPrice}));
       })
     },
   })
