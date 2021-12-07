@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 import { RootState } from ".."
-import {CartItem} from './cart-api-slice';
+import {CartItem, ShippingAddress} from './cart-api-slice';
+import { userInfoFromStorage } from "./user-api-slice";
 export interface Order
 {
     orderItems: CartItem [],
-    shippingAddress: string,
+    shippingAddress: ShippingAddress,
     paymentMethod: string,
     itemsPrice: string,
     shippingPrice: string,
@@ -13,13 +14,18 @@ export interface Order
     totalPrice: string,
   }
 
-const cartItemsFromStorage = localStorage.getItem('cartItems')
-  ? JSON.parse(localStorage.getItem('cartItems') as string)
-  : []
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': `Bearer ${userInfoFromStorage?.token || ''}`,
+    },
+  }
+
+
 export const addOrder = createAsyncThunk(
     'order/add',
     async (order:Order, thunkAPI) => {
-      const response = await axios.post(`/api/orders/`, order)
+      const response = await axios.post(`/api/orders/`, order, config); 
       const {data} = response;
 
       return {...data};
@@ -28,7 +34,7 @@ export const addOrder = createAsyncThunk(
   
   const initialState = {
     orderItems: [],
-    shippingAddress: '',
+    shippingAddress: {address: '', city: '', country: ''},
     paymentMethod: '',
     itemsPrice: '',
     shippingPrice: '',
@@ -41,8 +47,7 @@ export const addOrder = createAsyncThunk(
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-      builder.addCase(addOrder.fulfilled, (state:Order, action) => {
-        console.log('order added')
+      builder.addCase(addOrder.fulfilled, (state:Order, action) => {     
       })
     },
   })

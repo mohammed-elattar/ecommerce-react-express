@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { selectCart } from '../store/features/cart-api-slice';
 import Message from '../components/Message';
 import MasterPage from '../components/MasterPage';
+import { addOrder } from '../store/features/order-api-slice';
 
 const PlaceOrder = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const cart = useSelector(selectCart);
 
   if (!cart.shippingAddress.address) {
@@ -19,7 +20,18 @@ const PlaceOrder = () => {
   }
 
   const placeOrderHandler = () => {
-    console.log('order');
+    dispatch(
+      addOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        taxPrice: cart.taxPrice,
+        shippingPrice: cart.shippingPrice,
+        totalPrice: cart.totalPrice,
+      })
+    );
+    navigate('/');
   };
 
   return (

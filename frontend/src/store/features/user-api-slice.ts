@@ -3,7 +3,7 @@ import { api, User } from '../../services/auth'
 import { userProfileApi } from '../../services/userProfile';
 import type { RootState } from '../index';
 
-const userInfoFromStorage = localStorage.getItem('userInfo')
+export const userInfoFromStorage = localStorage.getItem('userInfo')
   ? JSON.parse(localStorage.getItem('userInfo') as string)
   : null
   
