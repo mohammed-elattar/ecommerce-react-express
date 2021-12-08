@@ -4,10 +4,12 @@ import { cartSlice } from './features/cart-api-slice';
 import authReducer from './features/user-api-slice';
 import { api } from '../services/auth'
 import { orderSlice } from './features/order-api-slice';
+import { orderDetailsApiSlice } from './features/order-details-api-slice';
 
 export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
+    [orderDetailsApiSlice.reducerPath]: orderDetailsApiSlice.reducer,
     [api.reducerPath]: api.reducer,
     cart: cartSlice.reducer,
     order: orderSlice.reducer,

@@ -1,10 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 import { RootState } from ".."
+import { User } from "../../services/auth";
 import {CartItem, ShippingAddress} from './cart-api-slice';
 import { userInfoFromStorage } from "./user-api-slice";
 export interface Order
 {
+    _id?: string;
+    user?: User;
+    isDelivered?: boolean;
+    deliveredAt?: string;
+    isPaid?: boolean;
+    paidAt?: string;
     orderItems: CartItem [],
     shippingAddress: ShippingAddress,
     paymentMethod: string,
@@ -48,6 +55,7 @@ export const addOrder = createAsyncThunk(
     reducers: {},
     extraReducers: (builder) => {
       builder.addCase(addOrder.fulfilled, (state:Order, action) => {     
+          state = action.payload;
       })
     },
   })

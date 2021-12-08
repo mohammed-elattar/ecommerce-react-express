@@ -10,6 +10,7 @@ import Profile from './screens/Profile';
 import Shipping from './screens/Shipping';
 import Payment from './screens/Payment';
 import PlaceOrder from './screens/PlaceOrder';
+import Order from './screens/Order';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         <Route path='/' element={<PrivateRoute />}>
           <Route path='/' element={<Home />} />
           <Route path='/product/:id' element={<Product />} />
+          <Route path='/order/:id' element={<Order />} />
           <Route path='/cart/:id' element={<CartScreen />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/shipping' element={<Shipping />} />

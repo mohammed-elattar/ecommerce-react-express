@@ -6,12 +6,14 @@ import CheckoutSteps from '../components/CheckoutSteps';
 import { selectCart } from '../store/features/cart-api-slice';
 import Message from '../components/Message';
 import MasterPage from '../components/MasterPage';
-import { addOrder } from '../store/features/order-api-slice';
+import { addOrder, selectOrder } from '../store/features/order-api-slice';
+import { AppDispatch } from '../store';
 
 const PlaceOrder = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const cart = useSelector(selectCart);
+  const order = useSelector(selectOrder);
 
   if (!cart.shippingAddress.address) {
     navigate('/shipping');
@@ -19,19 +21,21 @@ const PlaceOrder = () => {
     navigate('/payment');
   }
 
-  const placeOrderHandler = () => {
-    dispatch(
-      addOrder({
-        orderItems: cart.cartItems,
-        shippingAddress: cart.shippingAddress,
-        paymentMethod: cart.paymentMethod,
-        itemsPrice: cart.itemsPrice,
-        taxPrice: cart.taxPrice,
-        shippingPrice: cart.shippingPrice,
-        totalPrice: cart.totalPrice,
-      })
-    );
-    navigate('/');
+  const placeOrderHandler = async () => {
+    try {
+      const order = await dispatch(
+        addOrder({
+          orderItems: cart.cartItems,
+          shippingAddress: cart.shippingAddress,
+          paymentMethod: cart.paymentMethod,
+          itemsPrice: cart.itemsPrice,
+          taxPrice: cart.taxPrice,
+          shippingPrice: cart.shippingPrice,
+          totalPrice: cart.totalPrice,
+        })
+      ).unwrap();
+      navigate(`/order/${order._id}`);
+    } catch (error) {}
   };
 
   return (
