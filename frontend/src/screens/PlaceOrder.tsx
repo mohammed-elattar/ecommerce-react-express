@@ -6,14 +6,13 @@ import CheckoutSteps from '../components/CheckoutSteps';
 import { selectCart } from '../store/features/cart-api-slice';
 import Message from '../components/Message';
 import MasterPage from '../components/MasterPage';
-import { addOrder, selectOrder } from '../store/features/order-api-slice';
+import { addOrder } from '../store/features/order-api-slice';
 import { AppDispatch } from '../store';
 
 const PlaceOrder = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const cart = useSelector(selectCart);
-  const order = useSelector(selectOrder);
 
   if (!cart.shippingAddress.address) {
     navigate('/shipping');

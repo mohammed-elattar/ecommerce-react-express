@@ -83,7 +83,7 @@ export const addToCart = createAsyncThunk(
         
         const itemsPrice = addDecimals(
             cartItemsFromStorage.reduce(
-              (acc: number, item: CartItem) => acc + parseFloat(item.price) * item.qty,
+              (acc: number, item: CartItem) => acc + parseFloat(item.price) * item.qty || 1,
               0
             )
           );
