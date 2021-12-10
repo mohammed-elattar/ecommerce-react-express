@@ -79,10 +79,9 @@ export const addToCart = createAsyncThunk(
         totalPrice: string,}, action) => {
         state.cartItems.push(action.payload);
         localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
-
-        
+    
         const itemsPrice = addDecimals(
-            cartItemsFromStorage.reduce(
+            state.cartItems.reduce(
               (acc: number, item: CartItem) => acc + parseFloat(item.price) * item.qty || 1,
               0
             )
@@ -96,6 +95,7 @@ export const addToCart = createAsyncThunk(
             parseFloat(shippingPrice) +
             parseFloat(taxPrice)
           ).toFixed(2);
+
         state.itemsPrice = itemsPrice;
         state.shippingPrice = shippingPrice;
         state.taxPrice = taxPrice;

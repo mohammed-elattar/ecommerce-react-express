@@ -1,10 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
-import { Console } from "console";
 import { RootState } from ".."
 import { User } from "../../services/auth";
 import {CartItem, ShippingAddress} from './cart-api-slice';
-import { userInfoFromStorage } from "./user-api-slice";
 export interface Order
 {
     _id?: string;
@@ -26,14 +24,15 @@ export interface Order
   const config = {
     headers: {
       'Content-Type': 'application/json',
-      'authorization': `Bearer ${userInfoFromStorage?.token || ''}`,
+      'authorization': ``,
     },
   }
-
 
 export const addOrder = createAsyncThunk(
     'order/add',
     async (order:Order, thunkAPI) => {
+        const token = (thunkAPI.getState() as RootState).auth.userLogin.userInfo?.token
+        config.headers.authorization = `Bearer ${token}`;
       const response = await axios.post(`/api/orders/`, order, config); 
       const {data} = response;
 
@@ -44,6 +43,8 @@ export const addOrder = createAsyncThunk(
   export const payOrder = createAsyncThunk(
     'order/pay',
     async ({orderId, paymentResult}: {orderId: string, paymentResult: any}, thunkAPI) => {
+        const token = (thunkAPI.getState() as RootState).auth.userLogin.userInfo?.token
+        config.headers.authorization = `Bearer ${token}`;
       const response = await axios.put(`/api/orders/${orderId}/pay`, paymentResult, config); 
       const {data} = response;
 

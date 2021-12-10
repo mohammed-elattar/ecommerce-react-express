@@ -34,7 +34,9 @@ const PlaceOrder = () => {
         })
       ).unwrap();
       navigate(`/order/${order._id}`);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
