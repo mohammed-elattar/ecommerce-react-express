@@ -2,7 +2,7 @@ import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
 
-export const authUser = asyncHandler(async (req, res) => {
+const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user && (await user.matchPassword(password))) {
@@ -19,7 +19,7 @@ export const authUser = asyncHandler(async (req, res) => {
   throw new Error('invalid user name or password');
 });
 
-export const register = asyncHandler(async (req, res) => {
+const register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   const userExists = await User.findOne({ email });
 
@@ -47,7 +47,7 @@ export const register = asyncHandler(async (req, res) => {
   }
 });
 
-export const getUserProfile = asyncHandler(async (req, res) => {
+const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
     return res.json({
@@ -63,7 +63,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
   throw new Error('user not found');
 });
 
-export const updateUserProfile = asyncHandler(async (req, res) => {
+const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
     user.name = req.body.name || user.name;
@@ -86,3 +86,10 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
   res.status(404);
   throw new Error('user not found');
 });
+
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.json(users);
+});
+
+export { authUser, register, getUserProfile, updateUserProfile, getUsers };
