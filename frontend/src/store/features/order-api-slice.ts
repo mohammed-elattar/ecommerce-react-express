@@ -9,6 +9,7 @@ export interface Order
     user?: User;
     isDelivered?: boolean;
     deliveredAt?: string;
+    createdAt?: string;
     isPaid?: boolean;
     paidAt?: string;
     orderItems: CartItem [],
@@ -51,7 +52,7 @@ export const addOrder = createAsyncThunk(
       return {...data};
         }
   )
-  
+
   const initialState = {
       _id: '',
     orderItems: [],
