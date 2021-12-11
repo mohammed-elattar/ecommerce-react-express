@@ -17,6 +17,9 @@ export const userProfileApi = createApi({
     getUserProfile: build.query<User, void>({
       query: () => 'users/profile',
     }),
+    listUsers: build.query<User[], void>({
+        query: () => 'users',
+      }),
     updateUserProfile: build.mutation<User, RegisterRequest>({
         query(updatedUserData) {
           return {
@@ -29,4 +32,4 @@ export const userProfileApi = createApi({
   }),
 });
 
-export const { useGetUserProfileQuery, useUpdateUserProfileMutation } = userProfileApi;
+export const { useGetUserProfileQuery, useListUsersQuery, useUpdateUserProfileMutation } = userProfileApi;

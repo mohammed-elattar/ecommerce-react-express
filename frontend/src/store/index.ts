@@ -6,6 +6,7 @@ import { api } from '../services/auth'
 import { orderSlice } from './features/order-api-slice';
 import { orderDetailsApiSlice } from './features/order-details-api-slice';
 import { userOrdersSlice } from './features/user-orders-slice';
+import { userProfileApi } from '../services/userProfile';
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     [orderDetailsApiSlice.reducerPath]: orderDetailsApiSlice.reducer,
     [api.reducerPath]: api.reducer,
     [userOrdersSlice.reducerPath]: userOrdersSlice.reducer,
+    [userProfileApi.reducerPath]: userProfileApi.reducer,
     cart: cartSlice.reducer,
     order: orderSlice.reducer,
     auth: authReducer,

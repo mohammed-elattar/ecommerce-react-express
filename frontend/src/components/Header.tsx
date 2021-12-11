@@ -43,15 +43,15 @@ const Header: React.FC = () => {
               )}
               {userInfo && userInfo.isAdmin && (
                 <NavDropdown title='Admin' id='adminmenu'>
-                  <Nav.Link href='/admin/userlist'>
-                    <NavDropdown.Item>Users</NavDropdown.Item>
-                  </Nav.Link>
-                  <Nav.Link href='/admin/productlist'>
-                    <NavDropdown.Item>Products</NavDropdown.Item>
-                  </Nav.Link>
-                  <Nav.Link href='/admin/orderlist'>
-                    <NavDropdown.Item>Orders</NavDropdown.Item>
-                  </Nav.Link>
+                  <NavDropdown.Item href='/admin/userlist'>
+                    Users
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href='/admin/productlist'>
+                    Products
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href='/admin/orderlist'>
+                    Orders
+                  </NavDropdown.Item>
                 </NavDropdown>
               )}
             </Nav>

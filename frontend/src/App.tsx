@@ -11,6 +11,9 @@ import Shipping from './screens/Shipping';
 import Payment from './screens/Payment';
 import PlaceOrder from './screens/PlaceOrder';
 import Order from './screens/Order';
+import ProductList from './screens/ProductList';
+import UserList from './screens/UserList';
+import OrderList from './screens/OrderList';
 
 const App = () => {
   return (
@@ -20,6 +23,9 @@ const App = () => {
         <Route path='/register' element={<RegisterScreen />} />
         <Route path='/' element={<PrivateRoute />}>
           <Route path='/' element={<Home />} />
+          <Route path='/admin/productlist' element={<ProductList />} />
+          <Route path='/admin/userlist' element={<UserList />} />
+          <Route path='/admin/orderlist' element={<OrderList />} />
           <Route path='/product/:id' element={<Product />} />
           <Route path='/order/:id' element={<Order />} />
           <Route path='/cart/:id' element={<CartScreen />} />
