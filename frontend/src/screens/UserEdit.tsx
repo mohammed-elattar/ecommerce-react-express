@@ -1,13 +1,17 @@
 import React, { useState, useEffect, SyntheticEvent } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
-import { useGetUserDetailsQuery } from '../services/userProfile';
+import {
+  useGetUserDetailsQuery,
+  useUpdateUserMutation,
+} from '../services/userProfile';
 import MasterPage from '../components/MasterPage';
 
 const UserEdit = () => {
+  const navigate = useNavigate();
   const { id: userId } = useParams();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -20,6 +24,10 @@ const UserEdit = () => {
     isError,
   } = useGetUserDetailsQuery(userId || '');
 
+  const [
+    updateUser, // This is the mutation trigger
+  ] = useUpdateUserMutation();
+
   useEffect(() => {
     setName(userDetails?.name || '');
     setEmail(userDetails?.email || '');
@@ -28,6 +36,8 @@ const UserEdit = () => {
 
   const submitHandler = (e: SyntheticEvent) => {
     e.preventDefault();
+    updateUser({ _id: userId, name, email, isAdmin });
+    navigate('/admin/userlist');
   };
 
   return (

@@ -50,7 +50,18 @@ export const userProfileApi = createApi({
         },
         invalidatesTags: (result, error, id) => [{ type: 'User', id }],
       }),
+      updateUser: build.mutation<User, Partial<User>>({
+        query(data) {
+          const { _id, ...body } = data
+          return {
+            url: `users/${_id}`,
+            method: 'PUT',
+            body,
+          }
+        },
+        invalidatesTags: (result, error, {_id}) => [{ type: 'User', id: _id }],
+      }),
   }),
 });
 
-export const { useGetUserProfileQuery, useGetUserDetailsQuery,useListUsersQuery, useUpdateUserProfileMutation, useDeleteUserMutation } = userProfileApi;
+export const { useGetUserProfileQuery, useGetUserDetailsQuery,useListUsersQuery, useUpdateUserProfileMutation, useDeleteUserMutation, useUpdateUserMutation } = userProfileApi;
