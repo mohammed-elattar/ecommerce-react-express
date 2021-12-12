@@ -11,11 +11,11 @@ import Shipping from './screens/Shipping';
 import Payment from './screens/Payment';
 import PlaceOrder from './screens/PlaceOrder';
 import Order from './screens/Order';
-import ProductList from './screens/ProductList';
-import UserList from './screens/UserList';
-import OrderList from './screens/OrderList';
 import AdminRoute from './utils/AdminRoute';
-import UserEdit from './screens/UserEdit';
+import ProductList from './screens/admin/ProductList';
+import UserList from './screens/admin/UserList';
+import OrderList from './screens/admin/OrderList';
+import UserEdit from './screens/admin/UserEdit';
 
 const App = () => {
   return (

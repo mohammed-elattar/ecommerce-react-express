@@ -1,14 +1,14 @@
 import React, { useState, useEffect, SyntheticEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
-import FormContainer from '../components/FormContainer';
+import Message from '../../components/Message';
+import Loader from '../../components/Loader';
+import FormContainer from '../../components/FormContainer';
 import {
   useGetUserDetailsQuery,
   useUpdateUserMutation,
-} from '../services/userProfile';
-import MasterPage from '../components/MasterPage';
+} from '../../services/userProfile';
+import MasterPage from '../../components/MasterPage';
 
 const UserEdit = () => {
   const navigate = useNavigate();

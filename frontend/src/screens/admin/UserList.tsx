@@ -7,17 +7,17 @@ import {
   faTimes,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
 import {
   useDeleteUserMutation,
   useListUsersQuery,
-} from '../services/userProfile';
-import CustomError from '../types/CustomError';
-import { User } from '../services/auth';
-import MasterPage from '../components/MasterPage';
+} from '../../services/userProfile';
+import CustomError from '../../types/CustomError';
+import { User } from '../../services/auth';
+import MasterPage from '../../components/MasterPage';
+import Loader from '../../components/Loader';
+import Message from '../../components/Message';
 
-const UserListScreen = () => {
+const UserList = () => {
   const {
     data: users = [],
     isLoading: loading,
@@ -97,4 +97,4 @@ const UserListScreen = () => {
   );
 };
 
-export default UserListScreen;
+export default UserList;
