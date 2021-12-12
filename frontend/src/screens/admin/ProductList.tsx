@@ -3,10 +3,14 @@ import { Anchor } from 'react-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
-import { useFetchProductsQuery } from '../../store/features/product-api-slice';
+import {
+  useDeleteProductMutation,
+  useFetchProductsQuery,
+} from '../../store/features/product-api-slice';
 import { Product } from '../../products';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import MasterPage from '../../components/MasterPage';
 
 const ProductList = () => {
   const {
@@ -16,9 +20,11 @@ const ProductList = () => {
     error,
   } = useFetchProductsQuery();
 
+  const [deleteProduct] = useDeleteProductMutation();
+
   const deleteHandler = (id: string) => {
     if (window.confirm('Are you sure')) {
-      // DELETE PRODUCTS
+      deleteProduct(id);
     }
   };
 
@@ -27,14 +33,15 @@ const ProductList = () => {
   };
 
   return (
-    <>
+    <MasterPage>
       <Row className='align-items-center'>
         <Col>
           <h1>Products</h1>
         </Col>
-        <Col className='text-right'>
+        <Col>
           <Button
-            className='my-3'
+            className='my-3 '
+            style={{ float: 'right' }}
             //   onClick={() => createProductHandler()}
           >
             <FontAwesomeIcon icon={faPlus} /> Create Product
@@ -84,7 +91,7 @@ const ProductList = () => {
           </tbody>
         </Table>
       )}
-    </>
+    </MasterPage>
   );
 };
 

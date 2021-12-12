@@ -1,21 +1,45 @@
 import { BaseQueryFn, FetchArgs, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { RootState } from '..';
 import { Product } from '../../products';
 import CustomError from '../../types/CustomError';
 
 export const apiSlice = createApi({
   reducerPath: 'productApi',
-  baseQuery: fetchBaseQuery({baseUrl: '/api'}) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
+  baseQuery: fetchBaseQuery({baseUrl: '/api', prepareHeaders: (headers, { getState }) => {
+    // By default, if we have a token in the store, let's use that for authenticated requests
+    const token = (getState() as RootState).auth.userLogin.userInfo?.token
+    if (token) {
+      headers.set('authorization', `Bearer ${token}`)
+    }
+    return headers
+  },}) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
+  tagTypes: ['Product'],
   endpoints(builder) {
     return {
       fetchProducts: builder.query<Product[], void>({
         query() {
           return '/products';
         },
+        providesTags: (result, error, arg) => {
+            console.log(result && [...result.map(({ _id }) => ({ type: 'Product' as const, id: _id }))]);
+        return result
+          ? [...result.map(({ _id }) => ({ type: 'Product' as const, id: _id }))]
+          : ['Product'];
+    }
       }),
       fetchProduct: builder.query<Product, string|undefined>({
         query(id) {
           return `/products/${id}`;
         },
+      }),
+      deleteProduct: builder.mutation<{ message: string}, string>({
+        query(id) {
+          return {
+            url: `products/${id}`,
+            method: 'DELETE',
+          }
+        },
+        invalidatesTags: (result, error, id) => [{ type: 'Product', id }],
       }),
     };
   },
@@ -24,4 +48,4 @@ export const apiSlice = createApi({
 
 
   
-export const { useFetchProductsQuery, useFetchProductQuery } = apiSlice;
+export const { useFetchProductsQuery, useFetchProductQuery, useDeleteProductMutation } = apiSlice;
