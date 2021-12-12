@@ -6,12 +6,7 @@ import Message from '../../components/Message';
 import { useFetchProductsQuery } from '../../store/features/product-api-slice';
 import { Product } from '../../products';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCheck,
-  faEdit,
-  faPlus,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const ProductList = () => {
   const {
