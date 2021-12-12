@@ -9,7 +9,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { useListUsersQuery } from '../services/userProfile';
+import {
+  useDeleteUserMutation,
+  useListUsersQuery,
+} from '../services/userProfile';
 import CustomError from '../types/CustomError';
 import { User } from '../services/auth';
 import MasterPage from '../components/MasterPage';
@@ -22,8 +25,12 @@ const UserListScreen = () => {
     error,
   } = useListUsersQuery();
 
+  const [
+    deleteUser, // This is the mutation trigger
+  ] = useDeleteUserMutation();
+
   const deleteHandler = (id: string) => {
-    console.log('delete');
+    deleteUser(id);
   };
 
   return (

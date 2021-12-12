@@ -19,7 +19,7 @@ export const store = configureStore({
     order: orderSlice.reducer,
     auth: authReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat( api.middleware)
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat( api.middleware, apiSlice.middleware, orderDetailsApiSlice.middleware,userOrdersSlice.middleware, userProfileApi.middleware)
   ,
 });
 

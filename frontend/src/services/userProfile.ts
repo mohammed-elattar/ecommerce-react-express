@@ -13,12 +13,19 @@ export const userProfileApi = createApi({
     }
     return headers
   },}) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
+  tagTypes: ['User'],
   endpoints: (build) => ({
     getUserProfile: build.query<User, void>({
       query: () => 'users/profile',
     }),
     listUsers: build.query<User[], void>({
         query: () => 'users',
+        providesTags: (result, error, arg) => {
+            console.log(result && [...result.map(({ _id }) => ({ type: 'User' as const, id: _id }))]);
+        return result
+          ? [...result.map(({ _id }) => ({ type: 'User' as const, id: _id }))]
+          : ['User'];
+    }
       }),
     updateUserProfile: build.mutation<User, RegisterRequest>({
         query(updatedUserData) {
@@ -29,7 +36,16 @@ export const userProfileApi = createApi({
           };
         },
       }),
+      deleteUser: build.mutation<{ message: string}, string>({
+        query(id) {
+          return {
+            url: `users/${id}`,
+            method: 'DELETE',
+          }
+        },
+        invalidatesTags: (result, error, id) => [{ type: 'User', id }],
+      }),
   }),
 });
 
-export const { useGetUserProfileQuery, useListUsersQuery, useUpdateUserProfileMutation } = userProfileApi;
+export const { useGetUserProfileQuery, useListUsersQuery, useUpdateUserProfileMutation, useDeleteUserMutation } = userProfileApi;
