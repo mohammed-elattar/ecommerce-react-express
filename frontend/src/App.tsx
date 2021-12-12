@@ -14,6 +14,7 @@ import Order from './screens/Order';
 import ProductList from './screens/ProductList';
 import UserList from './screens/UserList';
 import OrderList from './screens/OrderList';
+import AdminRoute from './utils/AdminRoute';
 
 const App = () => {
   return (
@@ -23,9 +24,6 @@ const App = () => {
         <Route path='/register' element={<RegisterScreen />} />
         <Route path='/' element={<PrivateRoute />}>
           <Route path='/' element={<Home />} />
-          <Route path='/admin/productlist' element={<ProductList />} />
-          <Route path='/admin/userlist' element={<UserList />} />
-          <Route path='/admin/orderlist' element={<OrderList />} />
           <Route path='/product/:id' element={<Product />} />
           <Route path='/order/:id' element={<Order />} />
           <Route path='/cart/:id' element={<CartScreen />} />
@@ -33,6 +31,11 @@ const App = () => {
           <Route path='/shipping' element={<Shipping />} />
           <Route path='/payment' element={<Payment />} />
           <Route path='/placeorder' element={<PlaceOrder />} />
+        </Route>
+        <Route path='/' element={<AdminRoute />}>
+          <Route path='/admin/productlist' element={<ProductList />} />
+          <Route path='/admin/userlist' element={<UserList />} />
+          <Route path='/admin/orderlist' element={<OrderList />} />
         </Route>
       </Routes>
     </Router>
