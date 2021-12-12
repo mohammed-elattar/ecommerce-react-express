@@ -75,7 +75,7 @@ const UserListScreen = () => {
                   )}
                 </td>
                 <td>
-                  <Anchor href={`/user/${user._id}/edit`}>
+                  <Anchor href={`/admin/user/${user._id}/edit`}>
                     <Button variant='light' className='btn-sm'>
                       <FontAwesomeIcon icon={faEdit} />
                     </Button>

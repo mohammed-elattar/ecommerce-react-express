@@ -15,9 +15,14 @@ export const userProfileApi = createApi({
   },}) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
   tagTypes: ['User'],
   endpoints: (build) => ({
+    // for logged in user
     getUserProfile: build.query<User, void>({
       query: () => 'users/profile',
     }),
+    // get any user details and accessed by admin
+    getUserDetails: build.query<User, string>({
+        query: (id) => `users/${id}`,
+      }),
     listUsers: build.query<User[], void>({
         query: () => 'users',
         providesTags: (result, error, arg) => {
@@ -48,4 +53,4 @@ export const userProfileApi = createApi({
   }),
 });
 
-export const { useGetUserProfileQuery, useListUsersQuery, useUpdateUserProfileMutation, useDeleteUserMutation } = userProfileApi;
+export const { useGetUserProfileQuery, useGetUserDetailsQuery,useListUsersQuery, useUpdateUserProfileMutation, useDeleteUserMutation } = userProfileApi;
