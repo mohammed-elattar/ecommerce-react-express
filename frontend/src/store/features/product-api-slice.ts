@@ -52,11 +52,19 @@ export const apiSlice = createApi({
         },
         invalidatesTags: (result, error, id) => [{ type: 'Product', id }],
       }),
+      updateProduct: builder.mutation<Product, Partial<Product>>({
+        query(data) {
+            const { _id, ...body } = data;
+          return {
+            url: `products/${_id}`,
+            method: 'PUT',
+            body,
+          }
+        },
+        invalidatesTags: (result, error, {_id}) => [{ type: 'Product', id: _id }],
+      }),
     };
   },
 });
-
-
-
   
-export const { useFetchProductsQuery, useFetchProductQuery,useAddProductMutation, useDeleteProductMutation } = apiSlice;
+export const { useFetchProductsQuery, useFetchProductQuery,useAddProductMutation, useDeleteProductMutation, useUpdateProductMutation } = apiSlice;

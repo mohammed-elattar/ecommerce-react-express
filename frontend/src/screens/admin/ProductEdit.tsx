@@ -4,7 +4,10 @@ import { Form, Button } from 'react-bootstrap';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import FormContainer from '../../components/FormContainer';
-import { useFetchProductQuery } from '../../store/features/product-api-slice';
+import {
+  useFetchProductQuery,
+  useUpdateProductMutation,
+} from '../../store/features/product-api-slice';
 import MasterPage from '../../components/MasterPage';
 
 const ProductEdit = () => {
@@ -16,7 +19,9 @@ const ProductEdit = () => {
     isError,
     error,
   } = useFetchProductQuery(productId);
+  const [updateProduct] = useUpdateProductMutation();
 
+  const [isUpdated, setIsUpdated] = useState(false);
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState('');
@@ -37,7 +42,16 @@ const ProductEdit = () => {
 
   const submitHandler = (e: SyntheticEvent) => {
     e.preventDefault();
-    // UPDATE PRODUCT
+    updateProduct({
+      _id: product?._id,
+      name,
+      price,
+      image,
+      brand,
+      category,
+      countInStock,
+      description,
+    }).then(() => setIsUpdated(true));
   };
 
   return (
@@ -47,6 +61,9 @@ const ProductEdit = () => {
       </Link>
       <FormContainer>
         <h1>Edit Product</h1>
+        {isUpdated && (
+          <Message variant='success'>Product Updated Successfully</Message>
+        )}
         {isLoading ? (
           <Loader />
         ) : isError && error && 'status' in error ? (
