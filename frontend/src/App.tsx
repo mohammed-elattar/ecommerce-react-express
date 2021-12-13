@@ -16,6 +16,7 @@ import ProductList from './screens/admin/ProductList';
 import UserList from './screens/admin/UserList';
 import OrderList from './screens/admin/OrderList';
 import UserEdit from './screens/admin/UserEdit';
+import ProductEdit from './screens/admin/ProductEdit';
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
       <Routes>
         <Route path='/login' element={<LoginScreen />} />
         <Route path='/register' element={<RegisterScreen />} />
+
         <Route path='/' element={<PrivateRoute />}>
           <Route path='/' element={<Home />} />
           <Route path='/product/:id' element={<Product />} />
@@ -33,8 +35,10 @@ const App = () => {
           <Route path='/payment' element={<Payment />} />
           <Route path='/placeorder' element={<PlaceOrder />} />
         </Route>
+
         <Route path='/' element={<AdminRoute />}>
           <Route path='/admin/productlist' element={<ProductList />} />
+          <Route path='/admin/product/:id/edit' element={<ProductEdit />} />
           <Route path='/admin/userlist' element={<UserList />} />
           <Route path='/admin/orderlist' element={<OrderList />} />
           <Route path='/admin/user/:id/edit' element={<UserEdit />} />
