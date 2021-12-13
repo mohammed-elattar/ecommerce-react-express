@@ -21,11 +21,22 @@ export const apiSlice = createApi({
           return '/products';
         },
         providesTags: (result, error, arg) => {
-            console.log(result && [...result.map(({ _id }) => ({ type: 'Product' as const, id: _id }))]);
         return result
-          ? [...result.map(({ _id }) => ({ type: 'Product' as const, id: _id }))]
-          : ['Product'];
+          ? [...result.map(({ _id }) => ({ type: 'Product' as const, id: _id })), { type: 'Product', id: 'LIST' }]
+          : [{ type: 'Product', id: 'LIST' }];
     }
+      }),
+      addProduct: builder.mutation<Product, Partial<Product>>({
+        query(body) {
+          return {
+            url: `/products`,
+            method: 'POST',
+            body,
+          }
+        },
+        // Invalidates all Post-type queries providing the `LIST` id - after all, depending of the sort order,
+        // that newly created post could show up in any lists.
+        invalidatesTags: [{ type: 'Product', id: 'LIST' }],
       }),
       fetchProduct: builder.query<Product, string|undefined>({
         query(id) {
@@ -48,4 +59,4 @@ export const apiSlice = createApi({
 
 
   
-export const { useFetchProductsQuery, useFetchProductQuery, useDeleteProductMutation } = apiSlice;
+export const { useFetchProductsQuery, useFetchProductQuery,useAddProductMutation, useDeleteProductMutation } = apiSlice;

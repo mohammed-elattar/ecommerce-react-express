@@ -26,7 +26,6 @@ export const userProfileApi = createApi({
     listUsers: build.query<User[], void>({
         query: () => 'users',
         providesTags: (result, error, arg) => {
-            console.log(result && [...result.map(({ _id }) => ({ type: 'User' as const, id: _id }))]);
         return result
           ? [...result.map(({ _id }) => ({ type: 'User' as const, id: _id }))]
           : ['User'];

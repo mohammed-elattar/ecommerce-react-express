@@ -4,6 +4,7 @@ import { Table, Button, Row, Col } from 'react-bootstrap';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import {
+  useAddProductMutation,
   useDeleteProductMutation,
   useFetchProductsQuery,
 } from '../../store/features/product-api-slice';
@@ -21,15 +22,24 @@ const ProductList = () => {
   } = useFetchProductsQuery();
 
   const [deleteProduct] = useDeleteProductMutation();
-
+  const [addProduct] = useAddProductMutation();
   const deleteHandler = (id: string) => {
     if (window.confirm('Are you sure')) {
       deleteProduct(id);
     }
   };
-
-  const createProductHandler = (product: Product) => {
-    //   CREATE PRODUCT
+  const dummyProduct: Partial<Product> = {
+    name: 'Sample name',
+    price: 150,
+    image: '/images/sample.jpg',
+    brand: 'Sample brand',
+    category: 'Sample category',
+    countInStock: 0,
+    numReviews: 0,
+    description: 'Sample description',
+  };
+  const createProductHandler = (product: Partial<Product>) => {
+    addProduct(dummyProduct);
   };
 
   return (
@@ -42,7 +52,7 @@ const ProductList = () => {
           <Button
             className='my-3 '
             style={{ float: 'right' }}
-            //   onClick={() => createProductHandler()}
+            onClick={() => createProductHandler(dummyProduct)}
           >
             <FontAwesomeIcon icon={faPlus} /> Create Product
           </Button>
