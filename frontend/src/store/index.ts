@@ -8,6 +8,7 @@ import { orderDetailsApiSlice } from './features/order-details-api-slice';
 import { userOrdersSlice } from './features/user-orders-slice';
 import { userProfileApi } from '../services/userProfile';
 import { ordersApiSlice } from './features/orders-api-slice';
+import { uploadApiSlice } from './features/upload-api-slice';
 
 export const store = configureStore({
   reducer: {
@@ -17,11 +18,12 @@ export const store = configureStore({
     [userOrdersSlice.reducerPath]: userOrdersSlice.reducer,
     [userProfileApi.reducerPath]: userProfileApi.reducer,
     [ordersApiSlice.reducerPath]: ordersApiSlice.reducer,
+    [uploadApiSlice.reducerPath]: uploadApiSlice.reducer,
     cart: cartSlice.reducer,
     order: orderSlice.reducer,
     auth: authReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat( api.middleware, apiSlice.middleware, orderDetailsApiSlice.middleware,userOrdersSlice.middleware, userProfileApi.middleware, ordersApiSlice.middleware)
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat( api.middleware, apiSlice.middleware, orderDetailsApiSlice.middleware,userOrdersSlice.middleware, userProfileApi.middleware, ordersApiSlice.middleware, uploadApiSlice.middleware)
   ,
 });
 

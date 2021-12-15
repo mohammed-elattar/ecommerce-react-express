@@ -6,7 +6,7 @@ import connectDB from './config/db.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
-import uploadRoutes from './routes/uploadRoutes';
+import uploadRoutes from './routes/uploadRoutes.js';
 import { errorHandler, notFoundHandler } from './middleware/errorMiddleware.js';
 const app = express();
 dotenv.config();

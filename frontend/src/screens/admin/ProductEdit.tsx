@@ -9,9 +9,11 @@ import {
   useUpdateProductMutation,
 } from '../../store/features/product-api-slice';
 import MasterPage from '../../components/MasterPage';
+import { useUploadImageMutation } from '../../store/features/upload-api-slice';
 
 const ProductEdit = () => {
   const { id: productId } = useParams();
+  const [uploadImage, { isLoading: uploadLoading }] = useUploadImageMutation();
   const {
     data: product,
     isLoading,
@@ -20,7 +22,6 @@ const ProductEdit = () => {
     error,
   } = useFetchProductQuery(productId);
   const [updateProduct] = useUpdateProductMutation();
-
   const [isUpdated, setIsUpdated] = useState(false);
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
@@ -29,6 +30,20 @@ const ProductEdit = () => {
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState('');
+
+  const uploadFileHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e && e.target && e.target.files ? e.target.files[0] : null;
+    try {
+      if (null !== file) {
+        const formData = new FormData();
+        formData.append('image', file);
+        const data = await uploadImage(formData).unwrap();
+        setImage(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     setName(product?.name || '');
@@ -100,6 +115,17 @@ const ProductEdit = () => {
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='formFile' className='mb-3'>
+              <Form.Label>upload file</Form.Label>
+              <Form.Control
+                type='file'
+                onChange={(e) =>
+                  uploadFileHandler(e as React.ChangeEvent<HTMLInputElement>)
+                }
+              />
+              {uploadLoading && <Loader />}
             </Form.Group>
 
             <Form.Group controlId='brand'>
