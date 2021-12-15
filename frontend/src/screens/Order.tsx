@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
+import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { useFetchOrderQuery } from '../store/features/order-details-api-slice';
@@ -9,6 +9,7 @@ import { CartItem } from '../store/features/cart-api-slice';
 import axios from 'axios';
 import { PayPalButton } from 'react-paypal-button-v2';
 import {
+  markAsDelivered,
   payOrder,
   selectOrder,
   selectOrderLoading,
@@ -29,6 +30,20 @@ const OrderScreen = () => {
     try {
       if (orderId) {
         await dispatch(payOrder({ orderId, paymentResult }));
+      }
+    } catch (error) {
+      content = (
+        <Message variant='danger'>
+          <div>{(error as any).message}</div>
+        </Message>
+      );
+    }
+  };
+
+  const deliverHandler = async () => {
+    try {
+      if (orderId) {
+        await dispatch(markAsDelivered({ orderId }));
       }
     } catch (error) {
       content = (
@@ -215,6 +230,19 @@ const OrderScreen = () => {
                           onSuccess={successPaymentHandler}
                         />
                       )}
+                    </ListGroup.Item>
+                  )}
+
+                  {loading && <Loader />}
+                  {order.isPaid && !order.isDelivered && (
+                    <ListGroup.Item>
+                      <Button
+                        type='button'
+                        className='btn btn-block'
+                        onClick={deliverHandler}
+                      >
+                        Mark As Delivered
+                      </Button>
                     </ListGroup.Item>
                   )}
                 </ListGroup>

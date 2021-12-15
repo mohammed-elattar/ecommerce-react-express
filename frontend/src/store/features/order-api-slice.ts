@@ -53,6 +53,18 @@ export const addOrder = createAsyncThunk(
         }
   )
 
+  export const markAsDelivered = createAsyncThunk(
+    'order/markAsDelivered',
+    async ({orderId}: {orderId: string}, thunkAPI) => {
+        const token = (thunkAPI.getState() as RootState).auth.userLogin.userInfo?.token
+        config.headers.authorization = `Bearer ${token}`;
+      const response = await axios.put(`/api/orders/${orderId}/deliver`,{}, config); 
+      const {data} = response;
+
+      return {...data};
+        }
+  )
+
   const initialState = {
       _id: '',
     orderItems: [],
@@ -85,6 +97,10 @@ export const addOrder = createAsyncThunk(
     }).addCase(addOrder.fulfilled, (state:Order, action) => {     
         return {...action.payload, loading: false};
     }).addCase(payOrder.fulfilled, (state:Order, action) => {     
+        return {...action.payload, loading: false};
+    }).addCase(markAsDelivered.pending, (state:Order, action) => {     
+        state.loading = true;
+    }).addCase(markAsDelivered.fulfilled, (state:Order, action) => {     
         return {...action.payload, loading: false};
     })
     },
