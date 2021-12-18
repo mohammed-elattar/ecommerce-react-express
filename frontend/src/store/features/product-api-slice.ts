@@ -63,8 +63,18 @@ export const apiSlice = createApi({
         },
         invalidatesTags: (result, error, {_id}) => [{ type: 'Product', id: _id }],
       }),
+      createProductReview: builder.mutation<{ message: string}, {id: string, body:{rating: number, comment?: string}}>({
+        query({id, body}) {
+          return {
+            url: `products/${id}/reviews`,
+            method: 'POST',
+            body
+          }
+        },
+        invalidatesTags: [{ type: 'Product', id: 'LIST' }],
+      }),
     };
   },
 });
   
-export const { useFetchProductsQuery, useFetchProductQuery,useAddProductMutation, useDeleteProductMutation, useUpdateProductMutation } = apiSlice;
+export const { useFetchProductsQuery, useFetchProductQuery,useAddProductMutation, useDeleteProductMutation, useUpdateProductMutation, useCreateProductReviewMutation } = apiSlice;

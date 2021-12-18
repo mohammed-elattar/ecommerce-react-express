@@ -1,3 +1,10 @@
+export interface Review {
+    _id: string,
+    name: string,
+    rating: number,
+    createdAt: string,
+    comment: string
+}
 export interface Product {
     _id: string,
     name: string,
@@ -9,6 +16,7 @@ export interface Product {
     countInStock: number,
     rating: number,
     numReviews: number,
+    reviews?: Review[],
 }
 const products: Product[] = [
   {
