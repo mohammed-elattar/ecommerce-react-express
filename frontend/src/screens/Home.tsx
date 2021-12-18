@@ -6,6 +6,7 @@ import MasterPage from '../components/MasterPage';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
 import Product from '../components/Product';
+import ProductCarousel from '../components/ProductCarousel';
 import { Product as ProductModel } from '../products';
 import { useFetchProductsQuery } from '../store/features/product-api-slice';
 const Home: React.FC = () => {
@@ -22,6 +23,7 @@ const Home: React.FC = () => {
   } else if (isSuccess) {
     content = (
       <Row>
+        {!keyword && <ProductCarousel />}
         {data?.data.map((product: ProductModel) => (
           <Col sm='12' md='6' lg='4' xl='3' key={product._id}>
             <Product product={product} />

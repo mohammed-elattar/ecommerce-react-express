@@ -35,6 +35,16 @@ export const apiSlice = createApi({
           : [{ type: 'Product', id: 'LIST' }];
     }
       }),
+      fetchTopProducts: builder.query<Product[], void>({
+        query() {
+          return '/products/top';
+        },
+        providesTags: (result, error, arg) => {
+        return result
+          ? [...result.map(({ _id }) => ({ type: 'Product' as const, id: _id })), { type: 'Product', id: 'LIST' }]
+          : [{ type: 'Product', id: 'LIST' }];
+    }
+      }),
       addProduct: builder.mutation<Product, Partial<Product>>({
         query(body) {
           return {
@@ -89,4 +99,4 @@ export const apiSlice = createApi({
   },
 });
   
-export const { useFetchProductsQuery, useFetchProductQuery,useAddProductMutation, useDeleteProductMutation, useUpdateProductMutation, useCreateProductReviewMutation } = apiSlice;
+export const { useFetchProductsQuery, useFetchProductQuery,useAddProductMutation, useDeleteProductMutation, useUpdateProductMutation, useCreateProductReviewMutation, useFetchTopProductsQuery } = apiSlice;
