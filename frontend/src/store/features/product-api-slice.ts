@@ -42,6 +42,9 @@ export const apiSlice = createApi({
         query(id) {
           return `/products/${id}`;
         },
+        providesTags: (result, error, arg) => {
+            return [{ type: 'Product', id: result?._id }, { type: 'Product', id: 'LIST' }]
+        }
       }),
       deleteProduct: builder.mutation<{ message: string}, string>({
         query(id) {

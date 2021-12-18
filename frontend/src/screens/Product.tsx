@@ -19,6 +19,7 @@ import {
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { useAuth } from '../hooks/useAuth';
+import CustomError from '../types/CustomError';
 
 const ProductScreen = () => {
   const navigate = useNavigate();
@@ -29,7 +30,8 @@ const ProductScreen = () => {
 
   const { user: userInfo } = useAuth();
 
-  const [createProductReview] = useCreateProductReviewMutation();
+  const [createProductReview, { isError: isReviewError, error: reviewError }] =
+    useCreateProductReviewMutation();
   const submitHandler = (e: SyntheticEvent) => {
     e.preventDefault();
     createProductReview({ id: productId || '', body: { rating, comment } });
@@ -168,6 +170,12 @@ const ProductScreen = () => {
             ))}
             <ListGroup.Item>
               <h2>Write a Customer Review</h2>
+              {isReviewError && (
+                <Message variant='danger'>
+                  {(reviewError as CustomError).status}{' '}
+                  {(reviewError as CustomError).data.message}
+                </Message>
+              )}
               {userInfo ? (
                 <Form onSubmit={submitHandler}>
                   <Form.Group controlId='rating'>
