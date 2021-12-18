@@ -12,14 +12,16 @@ import { Product } from '../../products';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import MasterPage from '../../components/MasterPage';
+import Paginate from '../../components/Paginate';
+import { useParams } from 'react-router';
 
 const ProductList = () => {
-  const {
-    data: products = [],
-    isLoading,
-    isError,
-    error,
-  } = useFetchProductsQuery('');
+  const { pageNumber } = useParams();
+  console.log(pageNumber);
+  const { data, isLoading, isError, error } = useFetchProductsQuery({
+    keyword: '',
+    pageNumber: parseInt(pageNumber || '1'),
+  });
 
   const [deleteProduct] = useDeleteProductMutation();
   const [addProduct] = useAddProductMutation();
@@ -63,43 +65,50 @@ const ProductList = () => {
       ) : isError ? (
         <Message variant='danger'>{error}</Message>
       ) : (
-        <Table striped bordered hover responsive className='table-sm'>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>NAME</th>
-              <th>PRICE</th>
-              <th>CATEGORY</th>
-              <th>BRAND</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr key={product._id}>
-                <td>{product._id}</td>
-                <td>{product.name}</td>
-                <td>${product.price}</td>
-                <td>{product.category}</td>
-                <td>{product.brand}</td>
-                <td>
-                  <Anchor href={`/admin/product/${product._id}/edit`}>
-                    <Button variant='light' className='btn-sm'>
-                      <FontAwesomeIcon icon={faEdit} />
-                    </Button>
-                  </Anchor>
-                  <Button
-                    variant='danger'
-                    className='btn-sm'
-                    onClick={() => deleteHandler(product._id)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </Button>
-                </td>
+        <>
+          <Table striped bordered hover responsive className='table-sm'>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>PRICE</th>
+                <th>CATEGORY</th>
+                <th>BRAND</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {data?.data.map((product: Product) => (
+                <tr key={product._id}>
+                  <td>{product._id}</td>
+                  <td>{product.name}</td>
+                  <td>${product.price}</td>
+                  <td>{product.category}</td>
+                  <td>{product.brand}</td>
+                  <td>
+                    <Anchor href={`/admin/product/${product._id}/edit`}>
+                      <Button variant='light' className='btn-sm'>
+                        <FontAwesomeIcon icon={faEdit} />
+                      </Button>
+                    </Anchor>
+                    <Button
+                      variant='danger'
+                      className='btn-sm'
+                      onClick={() => deleteHandler(product._id)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Paginate
+            page={data?.page || 1}
+            pages={data?.pages || 1}
+            keyword={''}
+          />
+        </>
       )}
     </MasterPage>
   );

@@ -3,6 +3,15 @@ import { RootState } from '..';
 import { Product } from '../../products';
 import CustomError from '../../types/CustomError';
 
+interface ListResponse<T> {
+    page: number
+    // per_page: number
+    // total: number
+    // total_pages: number
+    pages:number;
+    data: T[]
+  }
+
 export const apiSlice = createApi({
   reducerPath: 'productApi',
   baseQuery: fetchBaseQuery({baseUrl: '/api', prepareHeaders: (headers, { getState }) => {
@@ -16,13 +25,13 @@ export const apiSlice = createApi({
   tagTypes: ['Product'],
   endpoints(builder) {
     return {
-      fetchProducts: builder.query<Product[], string>({
-        query(keyword = '') {
-          return `/products?keyword=${keyword}`;
+      fetchProducts: builder.query<ListResponse<Product>, {keyword: string, pageNumber: number}>({
+        query({keyword, pageNumber}) {
+          return `/products?keyword=${keyword||''}&pageNumber=${pageNumber||1}`;
         },
         providesTags: (result, error, arg) => {
         return result
-          ? [...result.map(({ _id }) => ({ type: 'Product' as const, id: _id })), { type: 'Product', id: 'LIST' }]
+          ? [...result.data.map(({ _id }) => ({ type: 'Product' as const, id: _id })), { type: 'Product', id: 'LIST' }]
           : [{ type: 'Product', id: 'LIST' }];
     }
       }),

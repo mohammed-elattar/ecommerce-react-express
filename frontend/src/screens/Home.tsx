@@ -4,18 +4,16 @@ import { useParams } from 'react-router';
 import Loader from '../components/Loader';
 import MasterPage from '../components/MasterPage';
 import Message from '../components/Message';
+import Paginate from '../components/Paginate';
 import Product from '../components/Product';
 import { Product as ProductModel } from '../products';
 import { useFetchProductsQuery } from '../store/features/product-api-slice';
 const Home: React.FC = () => {
-  const { keyword } = useParams();
-  const {
-    data: products = [],
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useFetchProductsQuery(keyword || '');
+  const { keyword, pageNumber } = useParams();
+  const { data, isLoading, isSuccess, isError, error } = useFetchProductsQuery({
+    keyword: keyword || '',
+    pageNumber: parseInt(pageNumber || '1'),
+  });
 
   let content;
 
@@ -24,11 +22,16 @@ const Home: React.FC = () => {
   } else if (isSuccess) {
     content = (
       <Row>
-        {products.map((product: ProductModel) => (
+        {data?.data.map((product: ProductModel) => (
           <Col sm='12' md='6' lg='4' xl='3' key={product._id}>
             <Product product={product} />
           </Col>
         ))}
+        <Paginate
+          page={data?.page || 1}
+          pages={data?.pages || 1}
+          keyword={''}
+        />
       </Row>
     );
   } else if (isError) {

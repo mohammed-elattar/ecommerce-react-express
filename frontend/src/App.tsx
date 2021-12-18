@@ -27,7 +27,9 @@ const App = () => {
 
         <Route path='/' element={<PrivateRoute />}>
           <Route path='/' element={<Home />} />
+          <Route path='/page/:pageNumber' element={<Home />} />
           <Route path='/search/:keyword' element={<Home />} />
+          <Route path='/search/:keyword/page/:pageNumber' element={<Home />} />
           <Route path='/product/:id' element={<Product />} />
           <Route path='/order/:id' element={<Order />} />
           <Route path='/cart/:id' element={<CartScreen />} />
@@ -39,6 +41,10 @@ const App = () => {
 
         <Route path='/' element={<AdminRoute />}>
           <Route path='/admin/productlist' element={<ProductList />} />
+          <Route
+            path='/admin/productlist/page/:pageNumber'
+            element={<ProductList />}
+          />
           <Route path='/admin/product/:id/edit' element={<ProductEdit />} />
           <Route path='/admin/userlist' element={<UserList />} />
           <Route path='/admin/orderlist' element={<OrderList />} />
