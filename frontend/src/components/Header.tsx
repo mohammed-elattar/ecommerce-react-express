@@ -1,5 +1,13 @@
 import React from 'react';
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import {
+  Button,
+  Container,
+  Form,
+  FormControl,
+  Nav,
+  Navbar,
+  NavDropdown,
+} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +15,7 @@ import { useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 import { logout } from '../store/features/user-api-slice';
 import { useDispatch } from 'react-redux';
+import SearchBox from './SearchBox';
 
 const Header: React.FC = () => {
   const { user: userInfo } = useAuth();
@@ -55,6 +64,7 @@ const Header: React.FC = () => {
                 </NavDropdown>
               )}
             </Nav>
+            <SearchBox />
           </Navbar.Collapse>
         </Container>
       </Navbar>

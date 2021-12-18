@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
+import { useParams } from 'react-router';
 import Loader from '../components/Loader';
 import MasterPage from '../components/MasterPage';
 import Message from '../components/Message';
@@ -7,13 +8,14 @@ import Product from '../components/Product';
 import { Product as ProductModel } from '../products';
 import { useFetchProductsQuery } from '../store/features/product-api-slice';
 const Home: React.FC = () => {
+  const { keyword } = useParams();
   const {
     data: products = [],
     isLoading,
     isSuccess,
     isError,
     error,
-  } = useFetchProductsQuery();
+  } = useFetchProductsQuery(keyword || '');
 
   let content;
 

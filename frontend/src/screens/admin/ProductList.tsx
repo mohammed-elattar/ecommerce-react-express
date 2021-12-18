@@ -19,7 +19,7 @@ const ProductList = () => {
     isLoading,
     isError,
     error,
-  } = useFetchProductsQuery();
+  } = useFetchProductsQuery('');
 
   const [deleteProduct] = useDeleteProductMutation();
   const [addProduct] = useAddProductMutation();

@@ -16,9 +16,9 @@ export const apiSlice = createApi({
   tagTypes: ['Product'],
   endpoints(builder) {
     return {
-      fetchProducts: builder.query<Product[], void>({
-        query() {
-          return '/products';
+      fetchProducts: builder.query<Product[], string>({
+        query(keyword = '') {
+          return `/products?keyword=${keyword}`;
         },
         providesTags: (result, error, arg) => {
         return result
