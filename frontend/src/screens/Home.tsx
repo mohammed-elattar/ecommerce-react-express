@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
 import MasterPage from '../components/MasterPage';
 import Message from '../components/Message';
@@ -23,7 +24,7 @@ const Home: React.FC = () => {
   } else if (isSuccess) {
     content = (
       <Row>
-        {!keyword && <ProductCarousel />}
+        {!keyword ? <ProductCarousel /> : <Link to='/'>Go Back</Link>}
         {data?.data.map((product: ProductModel) => (
           <Col sm='12' md='6' lg='4' xl='3' key={product._id}>
             <Product product={product} />
